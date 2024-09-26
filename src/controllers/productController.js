@@ -1,4 +1,4 @@
-import { createProduct, getAllProducts, getProductsById } from '../services/productService.js';
+import { createProduct, deleteProduct, getAllProducts, getProductById, updateProduct } from '../services/productService.js';
 
 export const getProducts = async(req,res) => {
     try {
@@ -12,7 +12,7 @@ export const getProducts = async(req,res) => {
     }
 };
 
-export default createProductController = async (req,res) => {
+export const createProductController = async (req,res) => {
     try {
         const newProduct = await createProduct(req.body);
         res.status(201).json(newProduct)
@@ -24,7 +24,7 @@ export default createProductController = async (req,res) => {
 
 export const getProduct = async(req, res)=>{
     try {
-        const product = await getProductsById(req.params.id)
+        const product = await getProductById(req.params.id)
         if(product) {
             res.json(product);
         }else {
@@ -35,3 +35,23 @@ export const getProduct = async(req, res)=>{
         res.status(500).json({ error: "Erro ao buscar o produto"})
     }
 };
+
+export const updateProductController = async(req, res) =>{
+    try {
+        const product = await updateProduct(req.params.id, req.body);
+        res.json(product);
+    }catch(error) {
+        res.status(500).json({ error: "Error ao atualizar produto"});
+        }
+}
+
+export const deleteProductController = async(req, res) =>{
+    try {
+        await deleteProduct(req.params.id);
+        res.status(204).send();
+    }catch (error) {
+        res.status(500).json({ error:" Erro ao deletar produto"});
+        }
+    
+};
+
